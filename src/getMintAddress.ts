@@ -1,7 +1,8 @@
 import { PublicKey } from "@solana/web3.js";
 
-export const getMintAddress =  (mint: "USDC" | "USDT", network: "mainnet-beta" | "devnet") => {
+export const getMintAddress =  (mint: "USDC" | "USDT", network: "mainnet-beta" | "devnet" | "custom") => {
 
+    const resolvedNetwork = network === "custom" ? "mainnet-beta" : network;
     const mints = {
         "devnet": {
           USDC: new PublicKey("BXXkv6zRCpzzB4K8GzJJwRGCqkAs7u3fTqYWMvYMgPqa"), // devnet USDC (fake mint)
@@ -13,5 +14,5 @@ export const getMintAddress =  (mint: "USDC" | "USDT", network: "mainnet-beta" |
         }
       };
 
-    return mints[network][mint];
+    return mints[resolvedNetwork][mint];
 };

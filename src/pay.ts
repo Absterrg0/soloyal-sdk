@@ -1,55 +1,58 @@
-
-import { clusterApiUrl, Connection, Transaction } from "@solana/web3.js";
-import {type PayProps} from './types';
+import { Connection, Transaction } from "@solana/web3.js";
+import { getSoloyalConfig } from "./config";
 import { getMintAddress } from "./getMintAddress";
-import { createTransferInstruction, getAssociatedTokenAddress } from "@solana/spl-token";
+import {
+  createTransferInstruction,
+  getAssociatedTokenAddress,
+} from "@solana/spl-token";
+import type { WalletContextState } from "@solana/wallet-adapter-react";
 
+/**
+ * Executes a token payment to the configured merchant.
+ * 
+ * Automatically uses:
+ * - The RPC URL from soloyal.config.ts (custom or standard)
+ * - The merchant public key
+ * - The token mint (USDC/USDT)
+ * 
+ * @param wallet Wallet from @solana/wallet-adapter-react
+ * @param amount Number of tokens to pay (e.g., 2.5)
+ * @param token Optional override (USDC/USDT)
+ * @returns The transaction signature string
+ */
+export async function pay(
+  wallet: WalletContextState,
+  amount: number,
+  token?: "USDC" | "USDT"
+): Promise<string> {
+  if (!wallet?.publicKey || !wallet.signTransaction) {
+    throw new Error("Wallet not connected");
+  }
 
+  const config = getSoloyalConfig();
 
+  const connection = new Connection(config.rpcUrl, "confirmed");
 
-export async function pay({
-    wallet,
-    network,
-    merchantPublicKey,
-    token,
-    amount
-}:PayProps){
+  const from = wallet.publicKey;
+  const to = config.merchantPublicKey;
+  const selectedToken = token || config.tokens[0];
 
-    if(!wallet ||  !wallet.publicKey || !wallet.signTransaction){
-        throw new Error("Wallet not connected");
-    }
+  const mint = getMintAddress(selectedToken, config.network);
 
-    const connection = new Connection(clusterApiUrl(network),"confirmed");
+  const fromTokenAcc = await getAssociatedTokenAddress(mint, from);
+  const toTokenAcc = await getAssociatedTokenAddress(mint, to);
 
-    const from = wallet.publicKey;
-    const to = merchantPublicKey;
-
-
-    const tx = new Transaction();
-
-    const mint = getMintAddress(token,network);
-
-    const fromTokenAcc = await getAssociatedTokenAddress(mint,from);
-    const toTokenAcc =await  getAssociatedTokenAddress(mint,to);
-
-
-
-    const transfer = createTransferInstruction(
-        fromTokenAcc,
-        toTokenAcc,
-        from,
-        amount * 1_000_000
+  const tx = new Transaction().add(
+    createTransferInstruction(
+      fromTokenAcc,
+      toTokenAcc,
+      from,
+      amount * 1_000_000 // For 6 decimal tokens like USDC/USDT
     )
+  );
 
+  const signed = await wallet.signTransaction(tx);
+  const signature = await connection.sendRawTransaction(signed.serialize());
 
-    tx.add(transfer);
-
-
-    const signedTx = await wallet.signTransaction(tx);
-
-    const txHash = await connection.sendRawTransaction(signedTx.serialize());
-
-    return txHash;
-
-
+  return signature;
 }
