@@ -1,33 +1,33 @@
-// types/soloyal-config.ts
+// types/rayzen-config.ts
 
 /**
- * Tokens supported by Soloyal SDK.
+ * Tokens supported by Rayzen SDK.
  */
-export type SoloyalToken = "USDC" | "USDT";
+export type RayzenToken = "USDC" | "USDT";
 
 /**
  * Allowed Solana network environments.
  */
-export type SoloyalNetwork = "mainnet-beta" | "devnet" | "custom";
+export type RayzenNetwork = "mainnet-beta" | "devnet" | "custom";
 
 /**
- * User-defined config structure for `soloyal.config.ts`
+ * User-defined config structure for `rayzen.config.ts`
  * 
  * - If network is "mainnet-beta" or "devnet", `rpcUrl` must not be provided.
  * - If network is "custom", `rpcUrl` is required.
  */
-export type SoloyalConfig =
+export type RayzenConfig =
   | {
       network: "mainnet-beta" | "devnet";
       rpcUrl?: never;
       merchantPublicKey: string;
-      tokens: [SoloyalToken] | [SoloyalToken, SoloyalToken];
+      tokens: [RayzenToken] | [RayzenToken, RayzenToken];
     }
   | {
       network: "custom";
       rpcUrl: string;
       merchantPublicKey: string;
-      tokens: [SoloyalToken] | [SoloyalToken, SoloyalToken];
+      tokens: [RayzenToken] | [RayzenToken, RayzenToken];
     };
 
 /**
@@ -35,9 +35,9 @@ export type SoloyalConfig =
  */
 import { PublicKey } from "@solana/web3.js";
 
-export type SoloyalResolvedConfig = {
-  network: SoloyalNetwork;
+export type RayzenResolvedConfig = {
+  network: RayzenNetwork;
   rpcUrl: string;
   merchantPublicKey: PublicKey;
-  tokens: [SoloyalToken] | [SoloyalToken, SoloyalToken];
+  tokens: [RayzenToken] | [RayzenToken, RayzenToken];
 };

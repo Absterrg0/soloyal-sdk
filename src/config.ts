@@ -1,21 +1,15 @@
 import { clusterApiUrl, PublicKey } from "@solana/web3.js";
-import { soloyalConfig } from "./soloyal.config";
-import type { SoloyalResolvedConfig, SoloyalConfig } from "./soloyal.config.types";
-
-let cachedConfig: SoloyalResolvedConfig | null = null;
+import type { RayzenResolvedConfig, RayzenConfig } from "./rayzen.config.types";
 
 /**
- * Returns the resolved Soloyal configuration.
- * Caches the result for efficiency.
+ * Validates and resolves a RazenConfig into a RazenResolvedConfig.
  * Throws descriptive errors for invalid configuration.
  */
-export function getSoloyalConfig(): SoloyalResolvedConfig {
-  if (cachedConfig) return cachedConfig;
-
+export function validateAndResolveRayzenConfig(config: RayzenConfig): RayzenResolvedConfig {
   // Clone to avoid mutating the imported config
-  const config = { ...soloyalConfig } as SoloyalConfig;
+  const cfg = { ...config } as RayzenConfig;
 
-  const { network, merchantPublicKey, tokens, rpcUrl } = config;
+  const { network, merchantPublicKey, tokens, rpcUrl } = cfg;
 
   if (!["mainnet-beta", "devnet", "custom"].includes(network)) {
     throw new Error(`Invalid network: ${network}`);
@@ -27,7 +21,7 @@ export function getSoloyalConfig(): SoloyalResolvedConfig {
 
   // Remove rpcUrl for standard networks
   if ((network === "mainnet-beta" || network === "devnet") && rpcUrl) {
-    delete (config as any).rpcUrl;
+    delete (cfg as any).rpcUrl;
   }
 
   let publicKey: PublicKey;
@@ -46,20 +40,10 @@ export function getSoloyalConfig(): SoloyalResolvedConfig {
     throw new Error("Only USDC or USDT are supported in tokens array.");
   }
 
-  const resolved: SoloyalResolvedConfig = {
+  return {
     network,
     rpcUrl: network === "custom" ? rpcUrl : clusterApiUrl(network),
     merchantPublicKey: publicKey,
     tokens: [...tokens], // Defensive copy
   };
-
-  cachedConfig = resolved;
-  return resolved;
-}
-
-/**
- * Clears the cached configuration (useful for testing or reloading).
- */
-export function clearSoloyalConfigCache() {
-  cachedConfig = null;
 }

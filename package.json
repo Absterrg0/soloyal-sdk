@@ -1,28 +1,42 @@
 {
-  "name": "sdk",
-  "module": "index.ts",
+  "name": "Rayzen",
+  "version": "1.0.0",
+  "main": "dist/index.js",
   "type": "module",
+  "module": "dist/index.js",
+  "types": "dist/index.d.ts",
   "devDependencies": {
     "@types/bun": "latest"
   },
   "scripts": {
-    "build": "bun build src/index.ts --outfile dist/index.js --target=node --format esm && tsc --emitDeclarationOnly --declaration --outDir dist"
-
+    "build": "npx tsc",
+    "rayzcuren:init": "node ./bin/rayzen.cjs",
+    "test": "bun test"
   },
   "peerDependencies": {
-    "typescript": "^5.0.0"
+    "typescript": "^5.0.0",
+    "react": "^19.1.0",
+    "react-dom": "^19.1.0"
   },
   "dependencies": {
+    "@radix-ui/react-dropdown-menu": "^2.1.15",
+    "@radix-ui/react-slot": "^1.2.3",
     "@solana/spl-token": "^0.4.13",
     "@solana/wallet-adapter-base": "^0.9.27",
     "@solana/wallet-adapter-react": "^0.15.39",
     "@solana/wallet-adapter-react-ui": "^0.9.39",
     "@solana/wallet-adapter-wallets": "^0.19.37",
     "@solana/web3.js": "^1.98.2",
+    "@tanstack/react-query": "^5.81.5",
     "@types/react": "^19.1.8",
+    "class-variance-authority": "^0.7.1",
+    "clsx": "^2.1.1",
     "lucide-react": "^0.525.0",
-    "react": "^19.1.0",
-    "react-dom": "^19.1.0",
+    "tailwind-merge": "^3.3.1",
+    "tw-animate-css": "^1.3.4",
     "zod": "^3.25.67"
+  },
+  "bin": {
+    "rayzen": "./bin/rayzen.cjs"
   }
 }

@@ -1,5 +1,7 @@
-export { default as CustomWalletButton } from './custom-wallet-button';
-export { default as CustomWalletModal } from './custom-modal';
-export { SoloyalWalletProvider } from './wallet-provider';
-export { getSoloyalConfig } from './config';
-export { type SoloyalConfig} from './soloyal.config.types';
+export { default as RayzenButton } from './rayzen-button';
+export { default as RayzenModal } from './rayzen-modal';
+export { default as RayzenProvider } from './providers/rayzen-provider';
+export { useRayzenConfig } from './providers/rayzen-provider';
+export { validateAndResolveRayzenConfig } from './config';
+export type { RayzenConfig, RayzenResolvedConfig, RayzenToken, RayzenNetwork } from './rayzen.config.types';
+export { default as RayzenPayButton} from './pay-with-crypto';
