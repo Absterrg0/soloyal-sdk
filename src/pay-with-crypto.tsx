@@ -16,7 +16,7 @@ interface PayWithCryptoProps {
   label?: string;
 }
 
-export function PayWithCrypto({
+export default function PayWithCrypto({
   amount,
   onSuccess,
   onError,

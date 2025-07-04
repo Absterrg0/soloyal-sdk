@@ -1,3 +1,5 @@
+import './styles.css';
+
 export { default as RayzenButton } from './rayzen-button';
 export { default as RayzenModal } from './rayzen-modal';
 export { default as RayzenProvider } from './providers/rayzen-provider';
