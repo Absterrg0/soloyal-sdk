@@ -19,7 +19,6 @@ export type PayWithCryptoProps = {
     onError?: (error: Error) => void;
     className?: string;
     label?: string;
-    theme?: "dark" | "light";
   }
 
 

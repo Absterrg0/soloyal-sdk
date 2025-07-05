@@ -12,33 +12,66 @@ import QueryProvider from "./query-provider"
 import clsx from "clsx"
 import { createContext } from "react"
 
-
 const OkitoConfigContext = createContext<OkitoResolvedConfig | null>(null)
 
 const ThemeContext = React.createContext<{
   theme: "light" | "dark";
   setTheme: (theme: "light" | "dark") => void;
+  systemTheme: "light" | "dark";
 } | null>(null)
 
 export default function OkitoProvider({
   children,
   config,
-  theme = "dark",
+  theme,
 }: {
   children: React.ReactNode
   config: OkitoConfig
-  theme?: "light" | "dark" 
+  theme?: "light" | "dark" | "system"
 }) {
   const endpoint = clusterApiUrl(config.network as Cluster)
   const resolvedConfig = React.useMemo(() => validateAndResolveOkitoConfig(config), [config])
-  const [currentTheme, setCurrentTheme] = React.useState<"light" | "dark">(theme)
+  
+  // System theme detection
+  const [systemTheme, setSystemTheme] = React.useState<"light" | "dark">("dark")
+  
+  React.useEffect(() => {
+    const mediaQuery = window.matchMedia("(prefers-color-scheme: dark)")
+    
+    const updateSystemTheme = () => {
+      setSystemTheme(mediaQuery.matches ? "dark" : "light")
+    }
+    
+    // Set initial theme
+    updateSystemTheme()
+    
+    // Listen for changes
+    mediaQuery.addEventListener("change", updateSystemTheme)
+    
+    return () => mediaQuery.removeEventListener("change", updateSystemTheme)
+  }, [])
+  
+  // Determine current theme based on prop and system preference
+  const [manualTheme, setManualTheme] = React.useState<"light" | "dark" | null>(
+    theme && theme !== "system" ? theme : null
+  )
+  
+  const currentTheme = manualTheme || systemTheme
+  
+  const setTheme = React.useCallback((newTheme: "light" | "dark") => {
+    setManualTheme(newTheme)
+  }, [])
 
   return (
     <ConnectionProvider endpoint={endpoint}>
       <WalletProvider wallets={[]} autoConnect>
         <OkitoConfigContext.Provider value={resolvedConfig}>
           <QueryProvider>
-          <ThemeContext.Provider value={{ theme: currentTheme, setTheme: setCurrentTheme }}>
+            <ThemeContext.Provider value={{ 
+              theme: currentTheme, 
+              setTheme,
+              systemTheme 
+            }}>
               <div className={clsx(currentTheme === "dark" && "dark")}>
                 {children}
               </div>
@@ -55,7 +88,6 @@ export function useOkitoConfig(): OkitoResolvedConfig {
   if (!ctx) throw new Error("useOkitoConfig must be used within a OkitoProvider")
   return ctx
 }
-
 
 export function useOkitoTheme() {
   const ctx = React.useContext(ThemeContext)

@@ -2,11 +2,12 @@ import { useWallet } from "@solana/wallet-adapter-react";
 import { Button } from "../components/ui/button";
 import { X } from "lucide-react";
 import { toast } from "sonner";
-
 import { OkitoAssets } from "../lib/assets";
+import { useOkitoTheme } from "../providers/okito-provider";
 
-export default function OkitoModal({ isOpen, onClose, theme = "dark" }: { isOpen: boolean; onClose: () => void, theme: "dark" | "light" }) {
+export default function OkitoModal({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }) {
     const { wallets, select } = useWallet();
+    const { theme } = useOkitoTheme();
 
     const handleWalletSelect = async (walletName: string) => {
         try {

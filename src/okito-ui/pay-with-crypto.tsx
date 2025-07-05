@@ -7,7 +7,7 @@ import { Button } from '../components/ui/button';
 import { Card, CardContent } from '../components/ui/card';
 import OkitoButton from './okito-button';
 import { pay } from "../logic/pay";
-import { useOkitoConfig } from "../providers/okito-provider";
+import { useOkitoConfig, useOkitoTheme } from "../providers/okito-provider";
 import { Check, AlertCircle, ExternalLink, Zap, Loader2, CreditCard, X } from 'lucide-react';
 import { toast } from 'sonner';
 import { OkitoAssets } from '../lib/assets';
@@ -19,12 +19,12 @@ export default function PayWithCrypto({
   onSuccess,
   onError,
   className = "",
-  label = "Pay with Crypto",
-  theme = "dark"
-}: PayWithCryptoProps) {
+  label = "Pay with Crypto"
+}: Omit<PayWithCryptoProps, 'theme'>) {
   const wallet = useWallet();
   const { connected, publicKey } = wallet;
   const config = useOkitoConfig();
+  const { theme } = useOkitoTheme();
 
   const [selectedToken, setSelectedToken] = useState<'USDC' | 'USDT'>('USDC');
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -112,7 +112,7 @@ export default function PayWithCrypto({
                       Secure, fast payments with cryptocurrency
                     </p>
                   </div>
-                  <OkitoButton theme={theme} />
+                  <OkitoButton />
                 </div>
               ) : paymentMutation.isSuccess ? (
                 <div className="text-center space-y-6">

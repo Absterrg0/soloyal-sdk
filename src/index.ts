@@ -6,6 +6,6 @@ export { default as OkitoProvider } from './providers/okito-provider';
 export { useOkitoConfig } from './providers/okito-provider';
 export { validateAndResolveOkitoConfig } from './logic/config';
 export type { OkitoConfig, OkitoResolvedConfig, OkitoToken, OkitoNetwork } from './types/okito.config.types';
-export { default as OkitoPayButton} from './okito-ui/pay-with-crypto';
+export { default as PayWithCrypto } from './okito-ui/pay-with-crypto';
 export { useOkitoTheme } from './providers/okito-provider';
-export { default as ModeToggleButton } from './themes-component/mode-toggle-button';
+export { default as ModeToggle } from './themes-component/mode-toggle-button';
