@@ -5,27 +5,27 @@ import {
   getAssociatedTokenAddress,
 } from "@solana/spl-token";
 import type { WalletContextState } from "@solana/wallet-adapter-react";
-import type { RayzenResolvedConfig } from "./rayzen.config.types";
+import type { OkitoResolvedConfig } from "../types/okito.config.types";
 
 /**
  * Executes a token payment to the configured merchant.
  * 
  * Automatically uses:
- * - The RPC URL from rayzen.config.ts (custom or standard)
+ * - The RPC URL from okito.config.ts (custom or standard)
  * - The merchant public key
  * - The token mint (USDC/USDT)
  * 
  * @param wallet Wallet from @solana/wallet-adapter-react
  * @param amount Number of tokens to pay (e.g., 2.5)
  * @param token Optional override (USDC/USDT)
- * @param config The RayzenResolvedConfig
+ * @param config The OkitoResolvedConfig
  * @returns The transaction signature string
  */
 export async function pay(
   wallet: WalletContextState,
   amount: number,
   token: "USDC" | "USDT",
-  config: RayzenResolvedConfig
+  config: OkitoResolvedConfig
 ): Promise<string> {
   if (!wallet?.publicKey || !wallet.signTransaction) {
     throw new Error("Wallet not connected");

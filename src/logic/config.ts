@@ -1,13 +1,13 @@
 import { clusterApiUrl, PublicKey } from "@solana/web3.js";
-import type { RayzenResolvedConfig, RayzenConfig } from "./rayzen.config.types";
+import type { OkitoResolvedConfig, OkitoConfig } from "../types/okito.config.types";
 
 /**
  * Validates and resolves a RazenConfig into a RazenResolvedConfig.
  * Throws descriptive errors for invalid configuration.
  */
-export function validateAndResolveRayzenConfig(config: RayzenConfig): RayzenResolvedConfig {
+export function validateAndResolveOkitoConfig(config: OkitoConfig): OkitoResolvedConfig {
   // Clone to avoid mutating the imported config
-  const cfg = { ...config } as RayzenConfig;
+  const cfg = { ...config } as OkitoConfig;
 
   const { network, merchantPublicKey, tokens, rpcUrl } = cfg;
 
