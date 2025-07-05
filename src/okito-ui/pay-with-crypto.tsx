@@ -25,6 +25,7 @@ export default function PayWithCrypto({
   const wallet = useWallet();
   const { connected, publicKey } = wallet;
   const config = useOkitoConfig();
+
   const [selectedToken, setSelectedToken] = useState<'USDC' | 'USDT'>('USDC');
   const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -80,7 +81,7 @@ export default function PayWithCrypto({
           />
           
           <div className="relative w-full max-w-md mx-4">
-            <div className="crypto-glass bg-white/95 dark:bg-card/95 backdrop-blur-xl border-border/30 dark:border-border/50 rounded-3xl p-6 shadow-2xl animate-in fade-in-0 zoom-in-95 duration-300">
+            <div className="crypto-glass-static bg-white/95 dark:bg-card/95 backdrop-blur-xl border-border/30 dark:border-border/50  p-6 shadow-2xl animate-in fade-in-0 zoom-in-95 duration-300">
               
               <div className="flex items-center justify-between mb-6">
                 <div>

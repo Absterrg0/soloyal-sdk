@@ -1,21 +1,37 @@
 {
   "name": "Okito",
   "version": "1.0.0",
-  "main": "dist/index.js",
   "type": "module",
+  "main": "dist/index.js",
   "module": "dist/index.js",
   "types": "dist/index.d.ts",
-  "devDependencies": {
-    "@types/bun": "latest"
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs"
+    },
+    "./styles.css": "./dist/styles.css"
   },
+  "files": [
+    "dist",
+    "bin"
+  ],
   "scripts": {
-    "build": "npx tsc && cp ./src/styles.css ./dist/styles.css",
+    "build": "tsup && cp ./src/styles.css ./dist/styles.css",
     "okito:init": "node ./bin/okito.cjs",
     "test": "bun test"
   },
   "peerDependencies": {
-    "react": "^19.1.0",
-    "react-dom": "^19.1.0",
+    "react": "^18.0.0 || ^19.0.0",
+    "react-dom": "^18.0.0 || ^19.0.0",
+    "typescript": "^5.0.0"
+  },
+  "devDependencies": {
+    "@types/bun": "latest",
+    "@types/react": "^19.1.8",
+    "react": "^18.0.0",
+    "react-dom": "^18.0.0",
     "typescript": "^5.0.0"
   },
   "dependencies": {
@@ -28,7 +44,6 @@
     "@solana/wallet-adapter-wallets": "^0.19.37",
     "@solana/web3.js": "^1.98.2",
     "@tanstack/react-query": "^5.81.5",
-    "@types/react": "^19.1.8",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "lucide-react": "^0.525.0",

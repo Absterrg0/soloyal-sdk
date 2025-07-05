@@ -1,0 +1,13 @@
+# Ignore everything else
+src
+.vscode
+*.ts
+*.tsx
+*.json
+*.lock
+*.md
+node_modules
+tsconfig.json
+tsup.config.ts
+*.test.*
+__tests__
