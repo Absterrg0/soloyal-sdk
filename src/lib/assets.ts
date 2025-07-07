@@ -16,4 +16,9 @@ export const OkitoAssets = {
         usdt: "https://9sdck39xuk.ufs.sh/f/n6oPhDbx3I9GyxDegIjnJl2Qs8VuwKYLh3CmnENSvZxOeWj4",
     },
     logo:"https://9sdck39xuk.ufs.sh/f/n6oPhDbx3I9GbqCmByxwrFVQLRXD1IckzqePx7O2oaN6EGvS"
+    ,
+    
 }
+
+
+

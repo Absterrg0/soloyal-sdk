@@ -20,13 +20,13 @@ export type OkitoConfig =
   | {
       network: "mainnet-beta" | "devnet";
       rpcUrl?: never;
-      merchantPublicKey: string;
+      publicKey: string;
       tokens: [OkitoToken] | [OkitoToken, OkitoToken];
     }
   | {
       network: "custom";
       rpcUrl: string;
-      merchantPublicKey: string;
+      publicKey: string;
       tokens: [OkitoToken] | [OkitoToken, OkitoToken];
     };
 
@@ -34,6 +34,6 @@ export type OkitoConfig =
 export type OkitoResolvedConfig = {
   network: OkitoNetwork;
   rpcUrl: string;
-  merchantPublicKey: PublicKey;
+  publicKey: PublicKey;
   tokens: [OkitoToken] | [OkitoToken, OkitoToken];
 };

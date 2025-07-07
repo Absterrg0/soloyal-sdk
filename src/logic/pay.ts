@@ -12,7 +12,7 @@ import type { OkitoResolvedConfig } from "../types/okito.config.types";
  * 
  * Automatically uses:
  * - The RPC URL from okito.config.ts (custom or standard)
- * - The merchant public key
+ * - The destination public key
  * - The token mint (USDC/USDT)
  * 
  * @param wallet Wallet from @solana/wallet-adapter-react
@@ -34,7 +34,7 @@ export async function pay(
   const connection = new Connection(config.rpcUrl, "confirmed");
 
   const from = wallet.publicKey;
-  const to = config.merchantPublicKey;
+  const to = config.publicKey;
   const selectedToken = token || config.tokens[0];
 
   const mint = getMintAddress(selectedToken, config.network);

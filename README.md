@@ -44,75 +44,9 @@ function App() {
 
 ## Theming
 
-The SDK automatically detects and adapts to the user's system theme preference. You can also provide manual theme control.
+This SDK does not provide its own theme provider. Please use [next-themes](https://github.com/pacocoursey/next-themes) or the [shadcn/ui theme system](https://ui.shadcn.com/docs/dark-mode) in your app. Okito SDK components will automatically follow your app's theme (e.g., via the `dark` class or CSS variables).
 
-### Automatic Theme Detection (Recommended)
-
-```tsx
-// Automatically uses system theme
-<OkitoProvider config={config}>
-  <PayWithCrypto amount={10.50} />
-</OkitoProvider>
-
-// Or explicitly use system theme
-<OkitoProvider config={config} theme="system">
-  <PayWithCrypto amount={10.50} />
-</OkitoProvider>
-```
-
-### Manual Theme Control
-
-```tsx
-// Force light theme
-<OkitoProvider config={config} theme="light">
-  <PayWithCrypto amount={10.50} />
-</OkitoProvider>
-
-// Force dark theme
-<OkitoProvider config={config} theme="dark">
-  <PayWithCrypto amount={10.50} />
-</OkitoProvider>
-```
-
-### Theme Toggle Component
-
-Include a theme toggle button for users to manually switch themes:
-
-```tsx
-import { ModeToggle } from '@okito/sdk';
-
-function App() {
-  return (
-    <OkitoProvider config={config}>
-      <div>
-        <ModeToggle /> {/* Theme toggle button */}
-        <PayWithCrypto amount={10.50} />
-      </div>
-    </OkitoProvider>
-  );
-}
-```
-
-### Using Theme Context
-
-Access theme information in your components:
-
-```tsx
-import { useOkitoTheme } from '@okito/sdk';
-
-function MyComponent() {
-  const { theme, setTheme, systemTheme } = useOkitoTheme();
-  
-  return (
-    <div>
-      <p>Current theme: {theme}</p>
-      <p>System theme: {systemTheme}</p>
-      <button onClick={() => setTheme('light')}>Light Mode</button>
-      <button onClick={() => setTheme('dark')}>Dark Mode</button>
-    </div>
-  );
-}
-```
+> Theme support is powered by [next-themes](https://github.com/pacocoursey/next-themes) and inspired by [shadcn/ui](https://ui.shadcn.com/).
 
 ## Components
 
@@ -162,6 +96,37 @@ const config = {
 ## Styling
 
 The SDK uses Tailwind CSS with custom crypto-themed glassmorphism styles. All components automatically adapt to light and dark themes using CSS variables and Tailwind's dark mode classes.
+
+## API Reference
+
+### OkitoProvider
+Wrap your app with this provider to enable Okito SDK features:
+```tsx
+import { OkitoProvider } from 'sdk';
+
+<OkitoProvider>
+  <App />
+</OkitoProvider>
+```
+
+### createConfig
+Call this in your `okito.config.ts` to set up your config globally:
+```ts
+import { createConfig } from 'sdk';
+
+export const okitoConfig = createConfig({
+  network: 'mainnet-beta',
+  merchantPublicKey: 'YOUR_PUBLIC_KEY',
+  tokens: ['USDC']
+});
+```
+
+### useOkitoConfig
+Access your resolved config anywhere in your app:
+```ts
+import { useOkitoConfig } from 'sdk';
+const config = useOkitoConfig();
+```
 
 ## License
 

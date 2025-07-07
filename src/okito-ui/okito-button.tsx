@@ -13,13 +13,11 @@ import {
 import { Copy, LogOut, Wallet, ChevronDown } from 'lucide-react';
 import { toast } from 'sonner';
 import OkitoModal from './okito-modal';
-import { useOkitoTheme } from '../providers/okito-provider';
     
 
 export default function OkitoButton() {
     const { publicKey, disconnect, connected } = useWallet();
     const [isModalOpen, setIsModalOpen] = useState(false);
-    const { theme } = useOkitoTheme();
 
     const handleConnect = () => {
         setIsModalOpen(true);

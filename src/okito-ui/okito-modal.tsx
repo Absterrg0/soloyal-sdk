@@ -3,12 +3,11 @@ import { Button } from "../components/ui/button";
 import { X } from "lucide-react";
 import { toast } from "sonner";
 import { OkitoAssets } from "../lib/assets";
-import { useOkitoTheme } from "../providers/okito-provider";
+import { useTheme } from "next-themes";
 
 export default function OkitoModal({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }) {
     const { wallets, select } = useWallet();
-    const { theme } = useOkitoTheme();
-
+    const theme : "light" | "dark" = useTheme().theme as "light" | "dark"; 
     const handleWalletSelect = async (walletName: string) => {
         try {
             const selectedWallet = wallets.find(wallet => wallet.adapter.name === walletName);
@@ -132,4 +131,4 @@ export default function OkitoModal({ isOpen, onClose }: { isOpen: boolean; onClo
             </div>
         </div>
     );
-} 
+}

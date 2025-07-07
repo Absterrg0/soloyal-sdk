@@ -1,15 +1,51 @@
+/**
+ * Okito SDK Config Logic
+ * Handles config validation, resolution, and global storage for the OkitoProvider.
+ *
+ * @module config
+ */
 import { clusterApiUrl, PublicKey } from "@solana/web3.js";
 import type { OkitoResolvedConfig, OkitoConfig } from "../types/okito.config.types";
 
+let _storedConfig: OkitoResolvedConfig | null = null;
+
 /**
- * Validates and resolves a RazenConfig into a RazenResolvedConfig.
- * Throws descriptive errors for invalid configuration.
+ * Validates and resolves the user's Okito config, then stores it globally for the provider to use.
+ *
+ * @param config - The user-defined OkitoConfig object.
+ * @returns The resolved OkitoResolvedConfig object.
+ * @throws If called more than once.
+ * @example
+ *   import { createConfig } from 'sdk';
+ *   createConfig({ ... });
+ */
+export function createConfig(config: OkitoConfig): OkitoResolvedConfig {
+  _storedConfig = validateAndResolveOkitoConfig(config);
+  return _storedConfig;
+}
+
+/**
+ * Retrieves the globally stored Okito config.
+ *
+ * @returns The resolved OkitoResolvedConfig object.
+ * @throws If config has not been set yet.
+ */
+export function getStoredConfig(): OkitoResolvedConfig {
+  if (!_storedConfig) throw new Error('Okito config not set.  Create a config in your okito.config.ts.');
+  return _storedConfig;
+}
+
+/**
+ * Validates and resolves the user's Okito config.
+ *
+ * @param config - The user-defined OkitoConfig object.
+ * @returns The resolved OkitoResolvedConfig object.
  */
 export function validateAndResolveOkitoConfig(config: OkitoConfig): OkitoResolvedConfig {
   // Clone to avoid mutating the imported config
   const cfg = { ...config } as OkitoConfig;
 
-  const { network, merchantPublicKey, tokens, rpcUrl } = cfg;
+  const { network, publicKey, tokens, rpcUrl } = cfg;
 
   if (!["mainnet-beta", "devnet", "custom"].includes(network)) {
     throw new Error(`Invalid network: ${network}`);
@@ -24,11 +60,11 @@ export function validateAndResolveOkitoConfig(config: OkitoConfig): OkitoResolve
     delete (cfg as any).rpcUrl;
   }
 
-  let publicKey: PublicKey;
+  let destinationPublicKey: PublicKey;
   try {
-    publicKey = new PublicKey(merchantPublicKey);
+    destinationPublicKey = new PublicKey(publicKey);
   } catch {
-    throw new Error("merchantPublicKey is not a valid Solana public key.");
+    throw new Error("publicKey is not a valid Solana public key.");
   }
 
   if (
@@ -43,7 +79,7 @@ export function validateAndResolveOkitoConfig(config: OkitoConfig): OkitoResolve
   return {
     network,
     rpcUrl: network === "custom" ? rpcUrl : clusterApiUrl(network),
-    merchantPublicKey: publicKey,
+    publicKey: destinationPublicKey,
     tokens: [...tokens], // Defensive copy
   };
 }
